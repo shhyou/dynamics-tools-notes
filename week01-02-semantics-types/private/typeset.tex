@@ -1,0 +1,111 @@
+% \usepackage[utf8]{inputenc}
+\usepackage[left=2.5cm,top=1.5cm,right=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{xcolor}
+
+\usepackage{amsmath,amssymb,amsfonts}
+% \usepackage{mathrsfs}   % for \mathscr{.}
+\usepackage{amsthm,thmtools,mathtools}
+\usepackage{dashbox}
+
+\usepackage{bussproofs}
+\EnableBpAbbreviations
+\usepackage{textgreek}
+
+% [T1]{fontenc} and beramono for tt font of '<'
+\usepackage[T1]{fontenc}
+\usepackage{beramono}
+
+\usepackage{pifont}
+\usepackage{hyperref,nameref}
+
+\newcommand{\deftechtag}[2]{\emph{\textbf{\hypertarget{#1}{#2}}}}
+\newcommand{\techtag}[2]{\hyperlink{#1}{#2}}
+\newcommand{\deftech}[1]{\deftech{#1}{#1}}
+\newcommand{\tech}[1]{\techtag{#1}{#1}}
+
+\declaretheoremstyle[
+    spaceabove=3pt,
+    spacebelow=3pt,
+    headfont=\scshape\bfseries,
+    bodyfont=\normalfont,
+    headpunct={.},
+    postheadspace={ },
+    headindent={},
+    notefont={\fontseries\mddefault\upshape}
+]{scheadstyle}
+\declaretheorem[parent=section,style=scheadstyle]{theorem}
+\declaretheorem[sibling=theorem,style=scheadstyle]{lemma}
+\declaretheorem[name=Proposition,sibling=theorem,style=scheadstyle]{prop}
+\declaretheorem[name=Property,sibling=theorem,style=scheadstyle]{property}
+\declaretheorem[name=Definition,sibling=theorem,style=scheadstyle]{defn}
+\declaretheorem[sibling=theorem,style=scheadstyle]{corollary}
+\declaretheorem[style=remark,name=Note,numbered=no,style=scheadstyle]{sidenote}
+\declaretheorem[style=remark,numbered=no,style=scheadstyle]{claim}
+\declaretheorem[style=remark,numbered=no,style=scheadstyle]{remark}
+
+\newenvironment{mathl}{\begin{array}{l}}{\end{array}}
+\newenvironment{mathllequ}{\left\{\begin{array}{ll}}{\end{array}\right.}
+
+\newcommand{\icase}{\item \textbf{Case}\,}
+
+\newcommand{\miff}{\text{ iff }}
+\newcommand{\mwhere}{\text{ where }}
+\newcommand{\mif}{\text{ if }}
+\newcommand{\mand}{\text{ and }}
+\newcommand{\mor}{\text{ or }}
+\newcommand{\mfor}{\text{ for }}
+
+\newcommand{\inn}{\notin}
+\newcommand{\Ga}{\alpha}
+\newcommand{\Gb}{\beta}
+\newcommand{\tGS}{\textnormal{\textSigma}}
+\newcommand{\tGs}{\textnormal{\textrho}}
+\newcommand{\GS}{\Sigma}
+\newcommand{\Gs}{\sigma}
+\newcommand{\GL}{\Lambda}
+\newcommand{\Gl}{\lambda}
+\newcommand{\tGl}{\text{\textlambda}}
+\newcommand{\Gr}{\rho}
+\newcommand{\tGr}{\text{\textrho}}
+\newcommand{\GD}{\Delta}
+\newcommand{\Gd}{\delta}
+\newcommand{\Gp}{\pi}
+\newcommand{\tGp}{\textnormal{\textpi}}
+\newcommand{\GG}{\Gamma}
+\newcommand{\Gg}{\gamma}
+\newcommand{\Gt}{\tau}
+\newcommand{\Gth}{\theta}
+\newcommand{\GTh}{\Theta}
+\newcommand{\Gk}{\kappa}
+
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbC}{\mathbb{C}}
+
+\newcommand{\st}[1]{\{ #1 \}}
+
+\newcommand{\FV}{\mathit{FV}\!}
+\newcommand{\BV}{\mathit{BV}\!}
+\newcommand{\dom}{\text{dom}}
+\newcommand{\im}{\text{Im}}
+
+\newcommand{\rul}[1]{\textsc{[#1]}}
+
+\newcommand{\THole}{\mathnormal{[]}}
+\newcommand{\inhole}[2]{#1\!\left[ #2 \right]}
+\newcommand{\subst}[3]{\assubst{#1}{\dosubst{#2}{#3}}}
+\newcommand{\substt}[5]{\assubst{#1}{\dosubst{#2,#4}{#3,#5}}}
+\newcommand{\assubst}[2]{#1\!\left[{#2}\right]}
+\newcommand{\dosubst}[2]{\left.\!{#2} \,\right/ #1}
+\newcommand{\fresh}[3]{\text{fresh } #1 \notin #2(#3)}
+\newcommand{\update}[3]{{#1\!\left[#2 \mapsto #3\right]}}
+
+\DeclareMathOperator{\mapstoD}{\overset{\smash{\scriptscriptstyle\mathit{d}}\vphantom{x}}{\mapsto}}
+\DeclareMathOperator{\tteq}{\textnormal{\texttt{=}}}
+
+\newcommand{\tup}[1]{\left\langle {#1} \right\rangle}

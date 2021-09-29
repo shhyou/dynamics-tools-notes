@@ -1,0 +1,135 @@
+\documentclass{article}
+
+\usepackage{libertine}
+\input{./private/typeset.tex}
+\usepackage[libertine]{newtxmath}
+
+\input{./private/syntx.tex}
+
+\title{Simple Types}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Simple Types}
+\subsection{Types}
+
+\[\begin{array}{lcl}
+\NT{\Gt}{Type} \NTEq
+    \TNum \NTSep
+    \TArrow{\Gt_1}{\Gt_2}
+    \\
+\NT{e}{Exp} \NTEq
+    n \NTSep
+    x \NTSep
+    \TFun{\textcolor{red}{(\TAnn{x}{\Gt})}}{e} \NTSep
+    \TApp{e_1}{e_2} \NTSep
+    \TOp{e_1,\dots,e_k}
+\end{array}\]
+
+\subsection{Type System}
+
+\vspace{1em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.3\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GG}{n}{\TNum}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.65\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_1}{\TNum}
+            $}
+            \AxiomC{$\dots$}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_k}{\TNum}
+            $}
+            \TrinaryInfC{$\displaystyle
+                \TTypes{\GG}{\TOp{e_1,\dots,e_k}}{\TNum}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{2em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG,\TAnn{x}{\Gt}}{e}{\Gt'}
+            $}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GG}{\TFun{(\TAnn{x}{\Gt})}{e}}{\TArrow{\Gt}{\Gt'}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_1}{\TArrow{\Gt}{\Gt'}}
+            $}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_2}{\Gt}
+            $}
+            \BinaryInfC{$\displaystyle
+                \TTypes{\GG}{\TApp{e_1}{e_2}}{\Gt'}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1em}
+\begin{prooftree}
+    \AxiomC{}
+    \RightLabel{$(\GG(x)=\Gt)$}
+    \UnaryInfC{$\displaystyle
+        \TTypes{\GG}{x}{\Gt}
+    $}
+\end{prooftree}
+
+\subsection{Meta-theoretic Properties}
+\subsubsection{Properties that Should be Provable}
+
+\begin{enumerate}
+\item
+  Reflexivity; hypothesis. \[\TTypes{\GG,(\TAnn{x}{\Gt}),\GG'}{x}{\Gt}\]
+\item
+  Transitivity; the Substitution Principle (where
+  \(x\inn\dom(\GG)\cup\dom(\GG')\)) \[
+   \TTypes{\GG,\GG'}{e}{\Gt}
+     \quad\mand{}\quad
+   \TTypes{\GG,(\TAnn{x}{\Gt}),\GG'}{e'}{\Gt'}
+     \quad\Rightarrow\quad
+   \TTypes{\GG,\GG'}{\subst{e'}{x}{e}}{\Gt'}
+   \]
+\end{enumerate}
+
+\subsubsection{Structural Rules}
+
+\begin{enumerate}
+\item
+  Weakening (where \(x\inn\FV(e)\)) \[
+   \TTypes{\GG}{e}{\Gt}
+     \quad\Rightarrow\quad
+   \TTypes{\GG,(\TAnn{x}{\Gt'})}{e}{\Gt}
+   \]
+\item
+  Contraction (where \(z\inn\FV(e)\)) \[
+   \TTypes{\GG,(\TAnn{x}{\Gt'}),(\TAnn{y}{\Gt'}),\GG'}{e}{\Gt}
+     \quad\Rightarrow\quad
+   \TTypes{\GG,(\TAnn{z}{\Gt'}),\GG'}{\substt{e}{x}{z}{y}{z}}{\Gt}
+   \]
+\item
+  Exchange \[
+   \TTypes{\GG,(\TAnn{x}{\Gt'}),(\TAnn{y}{\Gt''}),\GG'}{e}{\Gt}
+     \quad\Rightarrow\quad
+   \TTypes{\GG,(\TAnn{y}{\Gt''}),(\TAnn{x}{\Gt'}),\GG'}{e}{\Gt}
+   \]
+\end{enumerate}
+
+\end{document}

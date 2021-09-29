@@ -1,0 +1,218 @@
+\documentclass{article}
+
+\usepackage{libertine}
+\input{./private/typeset.tex}
+\usepackage[libertine]{newtxmath}
+
+\input{./private/syntx.tex}
+
+\title{Language Definition}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Language Definition}
+\subsection{Syntax}
+
+\[\begin{array}{lcl}
+\NT{A}{Answer} \NTEq
+    n \NTSep
+    \LAFun
+    \\
+\NT{e}{Exp} \NTEq
+    n \NTSep
+    x \NTSep
+    \TFun{x}{e} \NTSep
+    \TApp{e_1}{e_2} \NTSep
+    \TOp{e_1,\dots,e_k}
+    \\
+\NT{v}{Value} \NTEq
+    n \NTSep
+    \TFun{x}{e}
+    \\
+E \NTEq
+    \THole \NTSep
+    \TApp{E}{e} \NTSep
+    \TApp{v}{E} \NTSep
+    \TOp{v,\dots,E,e,\dots}
+\end{array}\]
+
+\subsection{Small-step Semantics (1)}
+
+\vspace{1em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.55\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \RRedex{
+                    \left( \TApp{(\TFun{x}{e})}{v} \right)
+                }{
+                    \subst{e}{x}{v}
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \RightLabel{$\displaystyle (
+                \Gd(\LOp,\overline{n_1},\dots,\overline{n_k})=\overline{n}
+            )$}
+            \UnaryInfC{$\displaystyle
+                \RRedex{
+                    \TOp{n_1,\dots,n_k}
+                }{
+                    n
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\begin{prooftree}
+    \AxiomC{$\displaystyle
+        \RRedex{e}{e'}
+    $}
+    \UnaryInfC{$\displaystyle
+        \REval{\inhole{E}{e}}{\inhole{E}{e'}}
+    $}
+\end{prooftree}
+
+\subsubsection{The Evaluator}
+
+\[\TEval{e} = \begin{mathllequ}
+    n, &
+        \mif \exists n.\; \REvalstar{e}{n}
+        \\
+    \TAFun, &
+        \mif \exists x,e'.\; \REvalstar{e}{\TFun{x}{e'}}
+\end{mathllequ}\]
+
+\subsection{Small-step Semantics (2)}
+
+\vspace{1em}
+\begin{minipage}[t]{0.9\textwidth}
+    \begin{minipage}{0.3\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \REval{e_1}{e'_1}
+            $}
+            \UnaryInfC{$\displaystyle
+                \REval{\TApp{e_1}{e_2}}{\TApp{e'_1}{e_2}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.3\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \REval{e_2}{e'_2}
+            $}
+            \UnaryInfC{$\displaystyle
+                \REval{\TApp{v}{e_2}}{\TApp{v}{e'_2}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.3\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \REval{
+                    \left( \TApp{(\TFun{x}{e})}{v} \right)
+                }{
+                    \subst{e}{x}{v}
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\begin{prooftree}
+    \AxiomC{$\displaystyle
+        \REval{e_i}{e'_i}
+    $}
+    \UnaryInfC{$\displaystyle
+        \REval{
+            \TOp{v_1,\dots,v_{i-1},e_i,e_{i+1},\dots,e_k}
+        }{
+            \TOp{v_1,\dots,v_{i-1},e'_i,e_{i+1},\dots,e_k}
+        }
+    $}
+\end{prooftree}
+
+\vspace{0.25em}
+\begin{prooftree}
+    \AxiomC{}
+    \RightLabel{$\displaystyle (
+        \Gd(\LOp,\overline{n_1},\dots,\overline{n_k})=\overline{n}
+    )$}
+    \UnaryInfC{$\displaystyle
+        \REval{
+            \TOp{n_1,\dots,n_k}
+        }{
+            n
+        }
+    $}
+\end{prooftree}
+
+\subsection{Big-step Semantics a.k.a. Natural Semantics}
+
+\vspace{1em}
+\begin{minipage}[t]{0.9\textwidth}
+    \begin{minipage}{0.2\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \EvalsTo{\TFun{x}{e}}{\TFun{x}{e}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.7\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \EvalsTo{e_1}{\TFun{x}{e}}
+            $}
+            \AxiomC{$\displaystyle
+                \EvalsTo{e_2}{v}
+            $}
+            \AxiomC{$\displaystyle
+                \EvalsTo{\subst{e}{x}{v}}{v'}
+            $}
+            \TrinaryInfC{$\displaystyle
+                \EvalsTo{\left(\TApp{e_1}{e_2}\right)}{v'}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1.5em}
+\begin{minipage}[t]{0.9\textwidth}
+    \begin{minipage}{0.2\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \EvalsTo{n}{n}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.7\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \EvalsTo{e_1}{n_1}
+            $}
+            \AxiomC{$\displaystyle\cdots$}
+            \AxiomC{$\displaystyle
+                \EvalsTo{e_k}{n_k}
+            $}
+            \RightLabel{$\displaystyle (
+                \Gd(\LOp,\overline{n_1},\dots,\overline{n_k})=\overline{n}
+            )$}
+            \TrinaryInfC{$\displaystyle
+                \EvalsTo{\TOp{e_1,\dots,e_k}}{n}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\end{document}
