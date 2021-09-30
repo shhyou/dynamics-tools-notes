@@ -1,4 +1,4 @@
-Syntactic Proofs Techniques: Glossaries and Notes
+Syntactic Proof Techniques: Glossaries and Notes
 =====
 To add your notes, simply drop a link here. For binary files like PDFs, upload
 to the [wiki](https://github.com/shhyou/dynamics-tools-notes/wiki) or
