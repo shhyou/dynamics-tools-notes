@@ -1,0 +1,87 @@
+\documentclass{article}
+
+\usepackage{libertine}
+\input{./private/typeset.tex}
+\usepackage[libertine]{newtxmath}
+
+\input{./private/syntx.tex}
+
+\title{Type Soundness}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Simple Types}
+\subsection{Language and Types}
+
+\[\begin{array}{lcl}
+\NT{A}{Answer} \NTEq
+    n \NTSep
+    \LAFun
+    \\
+\NT{\Gt}{Type} \NTEq
+    \TNum \NTSep
+    \TArrow{\Gt_1}{\Gt_2}
+    \\
+\NT{e}{Exp} \NTEq
+    n \NTSep
+    x \NTSep
+    \TFun{(\TAnn{x}{\Gt})}{e} \NTSep
+    \TApp{e_1}{e_2} \NTSep
+    \TOp{e_1,\dots,e_k}
+    \\
+\NT{v}{Value} \NTEq
+    n \NTSep
+    \TFun{(\TAnn{x}{\Gt})}{e}
+\end{array}\]
+
+\subsection{Candidate Statements of Type Soundness}
+
+\begin{enumerate}
+    \item If $\TTypes{\;}{e}{\Gt}$ then $\exists A.\; \TEval{e}=A$
+    \item If $\TTypes{\;}{e}{\Gt}$ then $\exists A.\; \TEval{e}=A$ or $e$ diverges.
+    \item If $\TTypes{\;}{e}{\Gt}$ then $\exists A.\; \TEval{e}=A$ where
+        \[\begin{mathl}
+            A ::= \dots \NTSep \lit{diverge}
+                \\
+            \TEval{e} = \begin{mathllequ}
+                n, &
+                    \mif \exists n.\; \REvalstar{e}{n}
+                    \\
+                \TAFun, &
+                    \mif \exists x,e'.\; \REvalstar{e}{\TFun{x}{e'}}
+                    \\
+                \lit{diverge}, &
+                    \mif \forall e'.\; \REvalstar{e}{e'} \Rightarrow
+                            \exists e''.\; \REval{e'}{e''}
+            \end{mathllequ}
+        \end{mathl}\]
+    \item If $\TTypes{\;}{e}{\Gt}$ then $\displaystyle
+        \left( \exists v.\; \REvalstar{e}{v} \right) \lor
+        \left( \forall e'.\; \REvalstar{e}{e'} \Rightarrow
+                \exists e''.\; \REval{e'}{e''}
+        \right)$
+    \item Syntactic Type Soundness (Wright and Felleisen).
+
+        If $\TTypes{\;}{e}{\Gt}$ then $\displaystyle
+        \left( \exists v.\; \REvalstar{e}{v} \land \textcolor{red}{\TTypes{\;}{v}{\Gt}} \right) \lor
+        \left( \forall e'.\; \REvalstar{e}{e'} \Rightarrow
+                \exists e''.\; \REval{e'}{e''}
+        \right)$
+\end{enumerate}
+
+\subsubsection{Type Safety}
+
+Type Safety (Harper).
+\begin{itemize}
+    \item Preservation. If $\TTypes{\;}{e}{\Gt}$ and $\REval{e}{e'}$ then
+        $\TTypes{\;}{e'}{\Gt}$
+    \item Progress. If $\TTypes{\;}{e}{\Gt}$ then one of the following holds.
+        \begin{enumerate}[(i)]
+            \item $e=v$
+            \item $\exists e'.\; \REval{e}{e'}$
+        \end{enumerate}
+\end{itemize}
+
+\end{document}

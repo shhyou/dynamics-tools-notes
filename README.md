@@ -10,3 +10,5 @@ to the [wiki](https://github.com/shhyou/dynamics-tools-notes/wiki) or
   - The syntax: [language.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7252162/language.pdf)
   - The operational semantics: [language.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7252162/language.pdf)
   - The type system: [simply-typed.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7252163/simply-typed.pdf)
+- [./week03-type-soundness](https://github.com/shhyou/dynamics-tools-notes/tree/main/week03-type-soundness)
+  - Type soundness (1): [soundness.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7256476/soundness.pdf)
