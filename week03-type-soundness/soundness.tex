@@ -24,6 +24,9 @@
     \TNum \NTSep
     \TArrow{\Gt_1}{\Gt_2}
     \\
+\NT{\Gt}{TypeCtxt} \NTEq
+    (\TAnn{x_1}{\Gt_1}), \dots, (\TAnn{x_n}{\Gt_n})
+    \\
 \NT{e}{Exp} \NTEq
     n \NTSep
     x \NTSep
@@ -43,7 +46,7 @@
     \item If $\TTypes{\;}{e}{\Gt}$ then $\exists A.\; \TEval{e}=A$ or $e$ diverges.
     \item If $\TTypes{\;}{e}{\Gt}$ then $\exists A.\; \TEval{e}=A$ where
         \[\begin{mathl}
-            A ::= \dots \NTSep \lit{diverge}
+            \NT{A}{Answer} ::= \dots \NTSep \lit{diverge}
                 \\
             \TEval{e} = \begin{mathllequ}
                 n, &

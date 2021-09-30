@@ -40,7 +40,9 @@ E \NTEq
 
 \subsection{Small-step Semantics (1)}
 
-\vspace{1em}
+\noindent
+    \fbox{$\RRedex{e_1}{e_2}$}
+    \\
 \begin{minipage}[t]{0.95\textwidth}
     \begin{minipage}{0.55\textwidth}
         \begin{prooftree}
@@ -71,6 +73,11 @@ E \NTEq
     \end{minipage}
 \end{minipage}
 
+\vspace{2em}
+\noindent
+    \fbox{$\REval{e_1}{e_2}$}
+    \vspace{-1em}
+    \\
 \begin{prooftree}
     \AxiomC{$\displaystyle
         \RRedex{e}{e'}
@@ -82,17 +89,23 @@ E \NTEq
 
 \subsubsection{The Evaluator}
 
-\[\TEval{e} = \begin{mathllequ}
+\[\begin{mathl}
+\LEval{} : \text{Exp} \to \text{Answer}
+    \\
+\TEval{e} = \begin{mathllequ}
     n, &
         \mif \exists n.\; \REvalstar{e}{n}
         \\
     \TAFun, &
         \mif \exists x,e'.\; \REvalstar{e}{\TFun{x}{e'}}
-\end{mathllequ}\]
+\end{mathllequ}
+\end{mathl}\]
 
 \subsection{Small-step Semantics (2)}
 
-\vspace{1em}
+\noindent
+    \fbox{$\REval{e_1}{e_2}$}
+    \\
 \begin{minipage}[t]{0.9\textwidth}
     \begin{minipage}{0.3\textwidth}
         \begin{prooftree}
@@ -158,7 +171,9 @@ E \NTEq
 
 \subsection{Big-step Semantics a.k.a. Natural Semantics}
 
-\vspace{1em}
+\noindent
+    \fbox{$\EvalsTo{e}{v}$}
+    \\
 \begin{minipage}[t]{0.9\textwidth}
     \begin{minipage}{0.2\textwidth}
         \begin{prooftree}
