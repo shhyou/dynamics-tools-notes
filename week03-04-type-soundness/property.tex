@@ -1,0 +1,34 @@
+\documentclass{article}
+
+\usepackage{libertine}
+\input{./private/typeset.tex}
+\usepackage[libertine]{newtxmath}
+
+\input{./private/syntx.tex}
+
+\title{Meta-theoretic Properties}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Syntactic Properties of the Type System}
+
+When proving type soundness, we need several properties of the type system itself.
+
+\begin{prop}[Inversion]
+  If $\TTypes{\GG}{e}{\Gt}$, that is, we have a derivation of this judgment, one of the following is true.
+  \begin{itemize}
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{n}{\TNum}$.
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{\TOp{e_1,\dots,e_k}}{\TNum}$ and $\TTypes{\GG}{e_1}{\TNum},\dots,\TTypes{\GG}{e_k}{\TNum}$ hold.
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{(\TFun{(\TAnn{x}{\Gt'})}{e_b})}{(\TArrow{\Gt'}{\Gt''})}$ and $\TTypes{\GG,\TAnn{x}{\Gt'}}{e_b}{\Gt''}$ holds.
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{\TApp{e_f}{e_a}}{\Gt}$ and there exists $\Gt'$ such that $\TTypes{\GG}{e_f}{\TArrow{\Gt'}{\Gt}}$ and $\TTypes{\GG}{e_a}{\Gt'}$ hold.
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{x}{\Gt}$ and $\GG(x)=\Gt$.
+  \end{itemize}
+\end{prop}
+
+\begin{prop}
+  If $\TTypes{}{v}{\TNum}$ then $v=n$. Similarly, if $\TTypes{}{v}{\TArrow{\Gt}{\Gt'}}$ then $v=\TFun{x}{e_b}$.
+\end{prop}
+
+\end{document}
