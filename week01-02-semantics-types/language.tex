@@ -31,6 +31,10 @@
     n \NTSep
     \TFun{x}{e}
     \\
+\NT{r}{Redex} \NTEq
+    \TApp{(\TFun{x}{e})}{v} \NTSep
+    \TOp{n_1,\dots,n_k}
+    \\
 E \NTEq
     \THole \NTSep
     \TApp{E}{e} \NTSep
@@ -41,7 +45,7 @@ E \NTEq
 \subsection{Small-step Semantics (1)}
 
 \noindent
-    \fbox{$\RRedex{e_1}{e_2}$}
+    \fbox{$\RRedex{e_1}{e_2}$}, or \fbox{$\RRedex{r}{e}$}
     \\
 \begin{minipage}[t]{0.95\textwidth}
     \begin{minipage}{0.55\textwidth}

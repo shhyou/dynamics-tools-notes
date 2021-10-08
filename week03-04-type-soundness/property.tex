@@ -16,7 +16,7 @@
 
 When proving type soundness, we need several properties of the type system itself.
 
-\begin{prop}[Inversion]
+\begin{prop}[\textsc{Inversion}]
   If $\TTypes{\GG}{e}{\Gt}$, that is, we have a derivation of this judgment, one of the following is true.
   \begin{itemize}
     \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{n}{\TNum}$.
@@ -29,6 +29,55 @@ When proving type soundness, we need several properties of the type system itsel
 
 \begin{prop}
   If $\TTypes{}{v}{\TNum}$ then $v=n$. Similarly, if $\TTypes{}{v}{\TArrow{\Gt}{\Gt'}}$ then $v=\TFun{x}{e_b}$.
+\end{prop}
+
+\begin{prop}[\textsc{Substitution}] If $\TTypes{\GG,(\TAnn{x}{\Gt})}{e}{\Gt'}$
+and $\TTypes{\GG}{v}{\Gt}$ then $\TTypes{\GG}{\subst{e}{x}{v}}{\Gt'}$.
+\end{prop}
+
+Recall that version (1) of the small-step semantics is defined
+using evaluation contexts and redices:
+\begin{center}
+    \begin{minipage}[t]{0.95\textwidth}
+        \begin{minipage}{0.45\textwidth}
+            $\displaystyle
+            \begin{array}{lcl}
+                \NT{r}{Redex} \NTEq
+                    \TApp{(\TFun{(\TAnn{x}{\Gt})}{e})}{v} \NTSep
+                    \TOp{n_1,\dots,n_k}
+                    \\
+                E \NTEq
+                    \THole \NTSep
+                    \TApp{E}{e} \NTSep
+                    \TApp{v}{E} \NTSep
+                    \TOp{v,\dots,E,e,\dots}
+            \end{array}$
+        \end{minipage}
+        \begin{minipage}{0.45\textwidth}
+            \begin{prooftree}
+                \AxiomC{$\displaystyle
+                    \RRedex{r}{e'}
+                $}
+                \UnaryInfC{$\displaystyle
+                    \REval{\inhole{E}{r}}{\inhole{E}{e'}}
+                $}
+            \end{prooftree}
+        \end{minipage}
+    \end{minipage}
+\end{center}
+
+To prove type safety for this version of the reduction relation,
+we need additional properties describing how a term relates to
+the evaluation contexts and the redices.
+\begin{prop}[\textsc{Unique Decomposition}]
+    If $\TTypes{}{e}{\Gt}$ and $e\ne v$, there exists a unique evaluation context $E$
+    and a redex $r$ such that $E$, $r$ are well-typed and
+    $e$ equals the decomposition:
+    \begin{itemize}
+        \item $\TTypes{}{E}{\TContext{\Gt'}{\Gt}}$,
+        \item $\TTypes{}{r}{\Gt'}$, and
+        \item $e = \inhole{E}{r}$.
+    \end{itemize}
 \end{prop}
 
 \end{document}
