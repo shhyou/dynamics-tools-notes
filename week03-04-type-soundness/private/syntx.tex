@@ -23,11 +23,11 @@
 \newcommand{\TAnn}[2]{#1 : #2}
 \newcommand{\TNum}{\lit{num}}
 \newcommand{\TArrow}[2]{#1 \to #2}
-\newcommand{\TContext}[2]{#1 \leadsto #2}
+\newcommand{\TContext}[3]{\vdash_\mathsf{E} (#1 \rhd #2) : #3}
 \newcommand{\TTypes}[3]{#1 \vdash #2 : #3}
 
 \newcommand{\LArrEval}{\longrightarrow}
-\DeclareMathOperator{\LArrRedex}{\,\mathbf{r}\,}
+\DeclareMathOperator{\LArrRedex}{\,\mathbf{R}\,}
 
 % \RRedex[n]: one line
 % \RRedex[b]: two lines wrapped inside an array

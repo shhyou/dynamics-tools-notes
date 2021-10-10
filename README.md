@@ -12,6 +12,12 @@ to the [wiki](https://github.com/shhyou/dynamics-tools-notes/wiki) or
   - The syntax: [language.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7307835/language.pdf)
   - The operational semantics: [language.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7307835/language.pdf)
   - The type system: [simply-typed.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7263510/simply-typed.pdf)
-- [./week03-04-type-soundness](https://github.com/shhyou/dynamics-tools-notes/tree/main/week03-04-type-soundness)
+### Type Soundness
+[./week03-04-type-soundness](https://github.com/shhyou/dynamics-tools-notes/tree/main/week03-04-type-soundness)
+
+- Using small-step reduction semantics (2)
   - Type soundness (1): [soundness.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7263509/soundness.pdf)
-  - Type soundness (2): a few syntactic properties of the type system [property.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7307834/property.pdf)
+  - Type soundness (2): a few syntactic properties of the type system [property.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7317661/property.pdf)
+- Using small-step reduction semantics (1)
+  - Typed evaluation contexts: [context.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7317660/context.pdf)
+  - A few syntactic properties of the type system [property.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7317661/property.pdf)

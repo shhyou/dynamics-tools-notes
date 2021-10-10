@@ -1,0 +1,252 @@
+\documentclass{article}
+
+\usepackage{libertine}
+\input{./private/typeset.tex}
+\usepackage[libertine]{newtxmath}
+
+\input{./private/syntx.tex}
+
+\title{Evaluation Context \vspace{-3em}}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Tools for Treating the Evaluation Contexts}
+\subsection{Language Syntax (Excerpts)}
+
+\[\begin{array}{lcl}
+\NT{\Gt}{Type} \NTEq
+    \TNum \NTSep
+    \TArrow{\Gt_a}{\Gt_r}
+    \\
+\NT{r}{Redex} \NTEq
+    \TApp{(\TFun{x}{e})}{v} \NTSep
+    \TOp{n_1,\dots,n_k}
+    \\
+E \NTEq
+    \THole \NTSep
+    \TApp{E}{e} \NTSep
+    \TApp{v}{E} \NTSep
+    \TOp{v,\dots,E,e,\dots}
+\end{array}\]
+
+\subsection{Small-step Semantics (1)}
+
+\noindent
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.2\textwidth}
+        \fbox{$\RRedex{r}{e}$}
+    \end{minipage}
+    \begin{minipage}{0.35\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \RRedex{
+                    \left( \TApp{(\TFun{x}{e})}{v} \right)
+                }{
+                    \subst{e}{x}{v}
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \RightLabel{$\displaystyle (
+                \Gd(\LOp,\overline{n_1},\dots,\overline{n_k})=\overline{n}
+            )$}
+            \UnaryInfC{$\displaystyle
+                \RRedex{
+                    \TOp{n_1,\dots,n_k}
+                }{
+                    n
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1em}
+\noindent
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.3\textwidth}
+        \fbox{$\REval{e_1}{e_2}$}
+    \end{minipage}
+    \begin{minipage}{0.65\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \RRedex{r}{e}
+            $}
+            \UnaryInfC{$\displaystyle
+                \REval{\inhole{E}{r}}{\inhole{E}{e}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\subsection{Type System}
+
+\noindent
+    \fbox{$\TTypes{\GG}{e}{\Gt}$}
+    \\
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.25\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \RightLabel{$\left((\TAnn{x}{\Gt})\in \GG\right)$}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GG}{x}{\Gt}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.25\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GG}{n}{\TNum}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.45\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_1}{\TNum}
+            $}
+            \AxiomC{$\dots$}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_k}{\TNum}
+            $}
+            \TrinaryInfC{$\displaystyle
+                \TTypes{\GG}{\TOp{e_1,\dots,e_k}}{\TNum}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG,\TAnn{x}{\Gt_a}}{e}{\Gt_r}
+            $}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GG}{\left(\TFun{(\TAnn{x}{\Gt_a})}{e}\right)}{(\TArrow{\Gt_a}{\Gt_r})}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_f}{\TArrow{\Gt_a}{\Gt_r}}
+            $}
+            \AxiomC{$\displaystyle
+                \TTypes{\GG}{e_a}{\Gt_a}
+            $}
+            \BinaryInfC{$\displaystyle
+                \TTypes{\GG}{\TApp{e_f}{e_a}}{\Gt_r}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\subsection{Typed Evaluation Contexts}
+
+\noindent
+    \fbox{$\TContext{E}{\Gt_h}{\Gt}$}
+    \\
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.21\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \TContext{\THole}{\Gt_h}{\Gt_h}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.37\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TContext{E_f}{\Gt_h}{\TArrow{\Gt_a}{\Gt_r}}
+            $}
+            \AxiomC{$\displaystyle
+                \TTypes{}{e_a}{\Gt_a}
+            $}
+            \BinaryInfC{$\displaystyle
+                \TContext{\TApp{E_f}{e_a}}{\Gt_h}{\Gt_r}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.37\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{}{v_f}{\TArrow{\Gt_a}{\Gt_r}}
+            $}
+            \AxiomC{$\displaystyle
+                \TContext{E_a}{\Gt_h}{\Gt_a}
+            $}
+            \BinaryInfC{$\displaystyle
+                \TContext{\TApp{v_f}{E_a}}{\Gt_h}{\Gt_r}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\begin{prooftree}
+    \AxiomC{$\displaystyle
+        \TTypes{}{v_i}{\TNum}
+    $ for all $1\le i\le j-1$}
+    \AxiomC{$\displaystyle
+        \TContext{E}{\Gt_h}{\TNum}
+    $}
+    \AxiomC{$\displaystyle
+        \TTypes{}{e_i}{\TNum}
+    $ for all $j+1\le i\le k$}
+    \TrinaryInfC{$\displaystyle
+        \TContext{\TOp{v_1,\dots,v_{j-1},E,e_{j+1},\dots,e_k}}{\Gt_h}{\TNum}
+    $}
+\end{prooftree}
+
+\subsection{Plugging Terms into Evaluation Contexts}
+
+For completeness, we present the definition of the replug function
+($\inholeb{\_}{\_}$) that substitutes a term for the hole in an evaluation context.
+
+\[\begin{array}{lcl}
+    \inholeb{\_}{\_} & : &
+        E \to
+        \text{Exp} \to
+        \text{Exp}
+        \\
+    \inholeb{\THole\,}{e_h} & = &
+        e_h
+        \\
+    \inholeb{\left(\TApp{E}{e}\right)}{e_h} & = &
+        \TApp{\left( \inholeb{E}{e_h} \right)}{e}
+        \\
+    \inholeb{\left(\TApp{v}{E}\right)}{e_h} & = &
+        \TApp{v}{\left( \inholeb{E}{e_h} \right)}
+        \\
+    \inholeb{\left(\TOp{v,\dots,E,e,\dots}\right)}{e_h} & = &
+        \TOp{v,\dots,\left(\inholeb{E}{e_h}\right),e,\dots}
+\end{array}\]
+
+\subsection{Meta-theoretic Properties}
+
+We design the typed evaluation context judgment ($\TContext{E}{\Gt_h}{\Gt}$)
+with the goal that the \nameref{prop:replug} property and
+the \nameref{prop:decomposition} property are provable.
+Therefore, the definition of the typed evaluation context
+judgment naturally follows the structure of the replug function
+($\inholeb{\_}{\_}$) and the typing judgment ($\TTypes{\GG}{e}{\Gt}$).
+
+\begin{prop}[\textsc{Replug}]\label{prop:replug}
+  If $\TContext{E}{\Gt_h}{\Gt}$ and $\TTypes{}{e_h}{\Gt_h}$ then $\TTypes{}{\inholeb{E}{e_h}}{\Gt}$.
+\end{prop}
+
+\begin{prop}[\textsc{Decomposition}]\label{prop:decomposition}
+  If $\TTypes{}{e}{\Gt}$ and $e=\inholeb{E}{e_H}$ then $\TContext{E}{\Gt_h}{\Gt}$ and $\TTypes{}{e_h}{\Gt_h}$.
+\end{prop}
+
+\end{document}

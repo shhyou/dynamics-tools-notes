@@ -21,8 +21,8 @@ When proving type soundness, we need several properties of the type system itsel
   \begin{itemize}
     \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{n}{\TNum}$.
     \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{\TOp{e_1,\dots,e_k}}{\TNum}$ and $\TTypes{\GG}{e_1}{\TNum},\dots,\TTypes{\GG}{e_k}{\TNum}$ hold.
-    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{(\TFun{(\TAnn{x}{\Gt'})}{e_b})}{(\TArrow{\Gt'}{\Gt''})}$ and $\TTypes{\GG,\TAnn{x}{\Gt'}}{e_b}{\Gt''}$ holds.
-    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{\TApp{e_f}{e_a}}{\Gt}$ and there exists $\Gt'$ such that $\TTypes{\GG}{e_f}{\TArrow{\Gt'}{\Gt}}$ and $\TTypes{\GG}{e_a}{\Gt'}$ hold.
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{(\TFun{(\TAnn{x}{\Gt_a})}{e_b})}{(\TArrow{\Gt_a}{\Gt_r})}$ and $\TTypes{\GG,\TAnn{x}{\Gt_a}}{e_b}{\Gt_r}$ holds.
+    \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{\TApp{e_f}{e_a}}{\Gt}$ and there exists $\Gt_a$ such that $\TTypes{\GG}{e_f}{\TArrow{\Gt_a}{\Gt}}$ and $\TTypes{\GG}{e_a}{\Gt_a}$ hold.
     \item $\TTypes{\GG}{e}{\Gt}$ is $\TTypes{\GG}{x}{\Gt}$ and $\GG(x)=\Gt$.
   \end{itemize}
 \end{prop}
@@ -39,7 +39,7 @@ Recall that version (1) of the small-step semantics is defined
 using evaluation contexts and redices:
 \begin{center}
     \begin{minipage}[t]{0.95\textwidth}
-        \begin{minipage}{0.45\textwidth}
+        \begin{minipage}{0.65\textwidth}
             $\displaystyle
             \begin{array}{lcl}
                 \NT{r}{Redex} \NTEq
@@ -53,7 +53,7 @@ using evaluation contexts and redices:
                     \TOp{v,\dots,E,e,\dots}
             \end{array}$
         \end{minipage}
-        \begin{minipage}{0.45\textwidth}
+        \begin{minipage}{0.25\textwidth}
             \begin{prooftree}
                 \AxiomC{$\displaystyle
                     \RRedex{r}{e'}
@@ -67,17 +67,26 @@ using evaluation contexts and redices:
 \end{center}
 
 To prove type safety for this version of the reduction relation,
-we need additional properties describing how a term relates to
-the evaluation contexts and the redices.
+we need additional properties to relate a term with
+the evaluation contexts and the redices. Additionally, we use
+the \emph{typed context judgment}, $\TContext{E}{\Gt_h}{\Gt}$,
+to capture the relation between evaluation contexts, the ``type''
+of the hole, $\Gt_h$, and the type of the entire term, $\Gt$.
+See \texttt{\footnotesize context.pdf} for the full definition. Here, we
+refresh the properties of typed contexts in
+\nameref{prop:replug} and \nameref{prop:decomposition}.
+
 \begin{prop}[\textsc{Unique Decomposition}]
     If $\TTypes{}{e}{\Gt}$ and $e\ne v$, there exists a unique evaluation context $E$
-    and a redex $r$ such that $E$, $r$ are well-typed and
-    $e$ equals the decomposition:
-    \begin{itemize}
-        \item $\TTypes{}{E}{\TContext{\Gt'}{\Gt}}$,
-        \item $\TTypes{}{r}{\Gt'}$, and
-        \item $e = \inhole{E}{r}$.
-    \end{itemize}
+    and a redex $r$ such that $e = \inhole{E}{r}$.
+\end{prop}
+
+\begin{prop}[\textsc{Replug}]\label{prop:replug}
+  If $\TContext{E}{\Gt_h}{\Gt}$ and $\TTypes{}{e_h}{\Gt_h}$ then $\TTypes{}{\inhole{E}{e_h}}{\Gt}$.
+\end{prop}
+
+\begin{prop}[\textsc{Decomposition}]\label{prop:decomposition}
+  If $\TTypes{}{\inhole{E}{e_h}}{\Gt}$ then $\TContext{E}{\Gt_h}{\Gt}$ and $\TTypes{}{e_h}{\Gt_h}$.
 \end{prop}
 
 \end{document}
