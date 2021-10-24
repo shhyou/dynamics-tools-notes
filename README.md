@@ -21,3 +21,8 @@ to the [wiki](https://github.com/shhyou/dynamics-tools-notes/wiki) or
 - Using small-step reduction semantics (1)
   - Typed evaluation contexts: [context.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7318205/context.pdf)
   - A few syntactic properties of the type system [property.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7317661/property.pdf)
+## Mutable References and Stores
+[./week06-07-store](https://github.com/shhyou/dynamics-tools-notes/tree/main/week06-07-store)
+
+- Mutable references, store typing and type soundness:
+    [store.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7406087/store.pdf)

@@ -1,0 +1,63 @@
+\newcommand{\lit}[0]{\mathsf}
+
+\newcommand{\NTEq}{& ::= &}
+\newcommand{\NTSep}{\;|\;}
+\newcommand{\NTSepln}{\\ & | &}
+\newcommand{\NT}[2]{{#1} \in \text{#2}}
+%
+\newcommand{\LAFun}{\lit{fun}}
+\newcommand{\TAFun}{\LAFun}
+%
+\newcommand{\Ttt}{\lit{\text{\#}t}}
+\newcommand{\Tff}{\lit{\text{\#}f}}
+%
+\newcommand{\LOp}{\mathit{op}}
+\newcommand{\TOp}[1]{\LOp\!\left(#1\right)}
+\DeclareMathOperator{\LBinOp}{\odot}
+\newcommand{\TBinOp}[2]{{#1} \LBinOp {#2}}
+%
+\newcommand{\TIf}[3]{\lit{if}\,#1\,#2\,#3}
+\newcommand{\TApp}[2]{#1 \, #2}
+\newcommand{\TFun}[2]{\tGl #1. #2}
+%
+\newcommand{\TLoc}{\ell}
+\newcommand{\TNew}[1]{\lit{new}(#1)}
+\newcommand{\TRead}[1]{\lit{read}(#1)}
+\newcommand{\TWrite}[2]{\lit{write}(#1,#2)}
+%
+\newcommand{\TAnn}[2]{#1 : #2}
+\newcommand{\TNum}{\lit{num}}
+\newcommand{\TArrow}[2]{#1 \to #2}
+\newcommand{\TRef}[1]{{\lit{ref}\,#1}}
+\newcommand{\TContext}[3]{\vdash_\mathsf{E} (#1 \rhd #2) : #3}
+\newcommand{\TTypes}[4]{#1;#2 \vdash #3 : #4}
+
+\newcommand{\LArrEval}{\longrightarrow}
+\DeclareMathOperator{\LArrRedex}{\,\mathbf{R}\,}
+
+% \RRedex[n]: one line
+% \RRedex[b]: two lines wrapped inside an array
+% \RRedex[a]: two lines without an enclosing array
+\newcommand{\NewlineRRedex}{\\}
+\newcommand{\RRedex}[3][n]{
+    \ifx n#1
+        #2 \LArrRedex #3
+    \else\ifx b#1
+        \begin{array}{@{}l@{}}
+            #2 \LArrRedex \NewlineRRedex
+            #3
+        \end{array}
+    \else\ifx a#1
+        #2 \LArrRedex \NewlineRRedex
+        #3
+    \else
+        \mathrm{RRedex: Illegal~option~#1}
+    \fi\fi\fi
+}
+\newcommand{\REval}[2]{#1 \LArrEval #2}
+\newcommand{\REvalstar}[2]{#1 \LArrEval^* #2}
+
+\newcommand{\LEval}{\mathit{eval}}
+\newcommand{\TEval}[1]{\LEval\!\left({#1}\right)}
+
+\newcommand{\EvalsTo}[2]{#1 \Downarrow #2}

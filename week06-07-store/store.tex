@@ -1,0 +1,315 @@
+\documentclass{article}
+
+\usepackage{libertine}
+\input{./private/typeset.tex}
+\usepackage[libertine]{newtxmath}
+
+\input{./private/syntx.tex}
+
+\title{Mutable References}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Mutable References and the Store}
+\subsection{Syntax}
+
+\[\begin{array}{lcl}
+\NT{e}{Exp} \NTEq
+    n \NTSep
+    x \NTSep
+    \TFun{x}{e} \NTSep
+    \TApp{e_1}{e_2} \NTSep
+    \TOp{e_1,\dots,e_k} \NTSep
+    \textcolor{red}{\TNew{e}} \NTSep
+    \textcolor{red}{\TRead{e}} \NTSep
+    \textcolor{red}{\TWrite{e}{e}}
+    \\
+\end{array}\]
+
+\subsection{The Evaluation Language and the Operational Semantics}
+
+\[\begin{array}{lcl}
+\NT{s}{Store} &:&
+    \text{Loc} \longrightarrow \text{Value}
+    \\
+\NT{\TLoc}{Loc} &&
+    \\
+\NT{e}{Exp} \NTEq
+    \cdots \NTSep
+    \textcolor{red}{\TLoc}
+    \\
+\NT{v}{Value} \NTEq
+    n \NTSep
+    \TFun{x}{e} \NTSep
+    \textcolor{red}{\TLoc}
+    \\
+\NT{r}{Redex} \NTEq
+    \TApp{(\TFun{x}{e})}{v} \NTSep
+    \TOp{n_1,\dots,n_k} \NTSep
+    \textcolor{red}{\TNew{v}} \NTSep
+    \textcolor{red}{\TRead{\TLoc}} \NTSep
+    \textcolor{red}{\TWrite{\TLoc}{v}}
+    \\
+E \NTEq
+    \THole \NTSep
+    \TApp{E}{e} \NTSep
+    \TApp{v}{E} \NTSep
+    \TOp{v,\dots,E,e,\dots} \NTSepln
+    \textcolor{red}{\TNew{E}} \NTSep
+    \textcolor{red}{\TRead{E}} \NTSep
+    \textcolor{red}{\TWrite{E}{e}} \NTSep
+    \textcolor{red}{\TWrite{v}{E}}
+\end{array}\]
+
+
+\noindent
+    \fbox{$\RRedex{\tup{s,r}}{\tup{s',e}}$}
+    \\
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.45\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \RRedex{
+                    \tup{
+                        s,
+                        \TApp{(\TFun{x}{e})}{v}
+                    }
+                }{
+                    \tup{s, \subst{e}{x}{v}}
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \RightLabel{$\displaystyle (
+                \Gd(\LOp,\overline{n_1},\dots,\overline{n_k})=\overline{n}
+            )$}
+            \UnaryInfC{$\displaystyle
+                \RRedex{
+                    \tup{s,\TOp{n_1,\dots,n_k}}
+                }{
+                    \tup{s,n}
+                }
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{0.5em}
+\begin{prooftree}
+    \AxiomC{}
+    \RightLabel{($\TLoc\notin\dom(s)$)}
+    \UnaryInfC{$\displaystyle
+    \RRedex{
+        \tup{s, \TNew{v}}
+    }{
+        \tup{\update{s}{\TLoc}{v}, \TLoc}
+    }$}
+\end{prooftree}
+
+\vspace{0.5em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.4\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \RightLabel{($s(\TLoc)=v$)}
+            \UnaryInfC{$\displaystyle
+            \RRedex{
+                \tup{s, \TRead{\TLoc}}
+            }{
+                \tup{s, v}
+            }$}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.53\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \RightLabel{($\TLoc\in\dom(s)$)}
+            \UnaryInfC{$\displaystyle
+            \RRedex{
+                \tup{s, \TWrite{\TLoc}{v}}
+            }{
+                \tup{\update{s}{\TLoc}{v}, v}
+            }$}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1.5em}
+\noindent
+    \fbox{$\REval{\tup{s_1,e_1}}{\tup{s_2,e_2}}$}
+    \vspace{-1em}
+\begin{prooftree}
+    \AxiomC{$\displaystyle
+        \RRedex{\tup{s,e}}{\tup{s',e'}}
+    $}
+    \UnaryInfC{$\displaystyle
+        \REval{\tup{s,\inhole{E}{e}}}{\tup{s',\inhole{E}{e'}}}
+    $}
+\end{prooftree}
+
+\section{Type System}
+
+\[\begin{array}{lcl}
+\NT{\Gt}{Type} \NTEq
+    \TNum \NTSep
+    \TArrow{\Gt_1}{\Gt_2} \NTSep
+    \textcolor{red}{\TRef{\Gt}}
+    \\
+\NT{\GG}{TypeCtxt} \NTEq
+    (\TAnn{x_1}{\Gt_1}), \dots, (\TAnn{x_n}{\Gt_n})
+    \\
+\NT{\GS}{StoreType} &:&
+    \text{Loc} \longrightarrow \text{Type}
+\end{array}\]
+
+\noindent
+    \fbox{$\TTypes{\GS}{\GG}{e}{\Gt}$}
+    \\
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.25\textwidth}
+\begin{prooftree}
+    \AxiomC{}
+    \RightLabel{$(\GG(x)=\Gt)$}
+    \UnaryInfC{$\displaystyle
+        \TTypes{\GS}{\GG}{x}{\Gt}
+    $}
+\end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.28\textwidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GS}{\GG}{n}{\TNum}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GS}{\GG}{e_1}{\TNum}
+            $}
+            \AxiomC{$\dots$}
+            \AxiomC{$\displaystyle
+                \TTypes{\GS}{\GG}{e_k}{\TNum}
+            $}
+            \TrinaryInfC{$\displaystyle
+                \TTypes{\GS}{\GG}{\TOp{e_1,\dots,e_k}}{\TNum}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{1em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GS}{\GG,\TAnn{x}{\Gt_a}}{e}{\Gt_r}
+            $}
+            \UnaryInfC{$\displaystyle
+                \TTypes{\GS}{\GG}{\TFun{(\TAnn{x}{\Gt_a})}{e}}{\TArrow{\Gt_a}{\Gt_r}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.42\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+                \TTypes{\GS}{\GG}{e_1}{\TArrow{\Gt_a}{\Gt_r}}
+            $}
+            \AxiomC{$\displaystyle
+                \TTypes{\GS}{\GG}{e_2}{\Gt_a}
+            $}
+            \BinaryInfC{$\displaystyle
+                \TTypes{\GS}{\GG}{\TApp{e_1}{e_2}}{\Gt_r}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\vspace{2em}
+\begin{minipage}[t]{0.95\textwidth}
+    \begin{minipage}{0.2\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\GS(\TLoc)=\Gt$}
+            \UnaryInfC{$\displaystyle
+            \TTypes{\GS}{\GG}{\TLoc}{\TRef{\Gt}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.23\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+            \TTypes{\GS}{\GG}{e}{\Gt}
+            $}
+            \UnaryInfC{$\displaystyle
+            \TTypes{\GS}{\GG}{\TNew{e}}{\TRef{\Gt}}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.22\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+            \TTypes{\GS}{\GG}{e_l}{\TRef{\Gt}}
+            $}
+            \UnaryInfC{$\displaystyle
+            \TTypes{\GS}{\GG}{\TRead{e_l}}{\Gt}
+            $}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}{0.3\textwidth}
+        \begin{prooftree}
+            \AxiomC{$\displaystyle
+            \TTypes{\GS}{\GG}{e_l}{\TRef{\Gt}}
+            $}
+            \AxiomC{$\displaystyle
+            \TTypes{\GS}{\GG}{e}{\Gt}
+            $}
+            \BinaryInfC{$\displaystyle
+            \TTypes{\GS}{\GG}{\TWrite{e_l}{e}}{\Gt}
+            $}
+        \end{prooftree}
+    \end{minipage}
+\end{minipage}
+
+\section{Type Soundness}
+\subsection{Store Typing}
+
+\noindent
+    \fbox{$\GS\sim s$}
+    \vspace{-1em}
+\begin{prooftree}
+    \AxiomC{$\displaystyle
+        \dom(s)\subseteq\dom(\GS)
+    $}
+    \AxiomC{$\displaystyle
+        \forall \TLoc\in\dom(s). \;\;
+        \TTypes{\GS}{\emptyset}{s(\TLoc)}{\GS(\TLoc)}
+    $}
+    \BinaryInfC{$\displaystyle
+        \GS\sim s
+    $}
+\end{prooftree}
+
+\subsection{Type Safety}
+\begin{theorem}[Progress]
+    For all $\GS$, $s$, $e$ and $\Gt$ such that $\GS\sim s$,
+    if $\TTypes{\GS}{\emptyset}{e}{\Gt}$
+    then there exists $e'$ and $s'$ such that
+    $\REval{\tup{s,e}}{\tup{s',e'}}$.
+\end{theorem}
+
+\begin{theorem}[Preservation]
+    For all $\GS$, $s$, $e$, $\Gt$, $s'$ and $e'$
+    such that $\GS\sim s$,
+    if $\TTypes{\GS}{\emptyset}{e}{\Gt}$
+    and $\REval{\tup{s,e}}{\tup{s',e'}}$ then there exists
+    $\GS'$ such that $\GS'\sim s'$ and
+    $\TTypes{\GS'}{\emptyset}{e'}{\Gt}$.
+\end{theorem}
+\end{document}
