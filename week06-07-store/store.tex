@@ -220,13 +220,13 @@ E \NTEq
     \begin{minipage}{0.42\textwidth}
         \begin{prooftree}
             \AxiomC{$\displaystyle
-                \TTypes{\GS}{\GG}{e_1}{\TArrow{\Gt_a}{\Gt_r}}
+                \TTypes{\GS}{\GG}{e_f}{\TArrow{\Gt_a}{\Gt_r}}
             $}
             \AxiomC{$\displaystyle
-                \TTypes{\GS}{\GG}{e_2}{\Gt_a}
+                \TTypes{\GS}{\GG}{e_a}{\Gt_a}
             $}
             \BinaryInfC{$\displaystyle
-                \TTypes{\GS}{\GG}{\TApp{e_1}{e_2}}{\Gt_r}
+                \TTypes{\GS}{\GG}{\TApp{e_f}{e_a}}{\Gt_r}
             $}
         \end{prooftree}
     \end{minipage}
@@ -296,11 +296,29 @@ E \NTEq
     $}
 \end{prooftree}
 
+\subsection{Store Ordering}
+
+\noindent
+    \fbox{$\GS\sqsubseteq \GS'$}
+    \vspace{-1em}
+\begin{prooftree}
+    \AxiomC{$\displaystyle
+        \dom(\GS)\subseteq\dom(\GS')
+    $}
+    \AxiomC{$\displaystyle
+        \forall \TLoc\in\dom(\GS). \;\;
+        \GS(\TLoc)=\GS'(\TLoc)
+    $}
+    \BinaryInfC{$\displaystyle
+        \GS\sqsubseteq \GS'
+    $}
+\end{prooftree}
+
 \subsection{Type Safety}
 \begin{theorem}[Progress]
     For all $\GS$, $s$, $e$ and $\Gt$ such that $\GS\sim s$,
     if $\TTypes{\GS}{\emptyset}{e}{\Gt}$
-    then there exists $e'$ and $s'$ such that
+    then either $e\in\text{Value}$ or there exists $e'$ and $s'$ such that
     $\REval{\tup{s,e}}{\tup{s',e'}}$.
 \end{theorem}
 
@@ -309,7 +327,19 @@ E \NTEq
     such that $\GS\sim s$,
     if $\TTypes{\GS}{\emptyset}{e}{\Gt}$
     and $\REval{\tup{s,e}}{\tup{s',e'}}$ then there exists
-    $\GS'$ such that $\GS'\sim s'$ and
+    $\GS'\sqsupseteq\GS$ such that $\GS'\sim s'$ and
     $\TTypes{\GS'}{\emptyset}{e'}{\Gt}$.
 \end{theorem}
+
+\begin{lemma}[Store Weakening]
+    If $\TTypes{\GS}{\GG}{e}{\Gt}$ and $\GS'\sqsupseteq\GS$
+    then $\TTypes{\GS'}{\GG}{e}{\Gt}$.
+\end{lemma}
+
+\begin{lemma}[Store Substitution]
+    If $\GS\sim s$ and $\TTypes{\GS}{\emptyset}{v'}{\GS(\TLoc)}$
+    for some $\TLoc\in\dom(s)$, we have
+    $\GS\sim \update{s}{\TLoc}{v'}$.
+\end{lemma}
+
 \end{document}

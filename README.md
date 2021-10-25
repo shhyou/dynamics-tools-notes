@@ -25,4 +25,4 @@ to the [wiki](https://github.com/shhyou/dynamics-tools-notes/wiki) or
 [./week06-07-store](https://github.com/shhyou/dynamics-tools-notes/tree/main/week06-07-store)
 
 - Mutable references, store typing and type soundness:
-    [store.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7406087/store.pdf)
+    [store.pdf](https://github.com/shhyou/dynamics-tools-notes/files/7412967/store.pdf)
